@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const myfruits = require("./api/routes/myfruits");
 const rankingRoutes = require("./api/routes/ranking");
-const userRoutes = require('./api/routes/login');
+const userRoutes = require('./api/routes/user');
 
 
 
