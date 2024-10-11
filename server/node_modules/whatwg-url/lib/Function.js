@@ -1,7 +1,7 @@
 "use strict";
 
 const conversions = require("webidl-conversions");
-const utils = require("./utils.js");
+const utils = require("whatwg-url/lib/utils.js");
 
 exports.convert = (globalObject, value, { context = "The provided value" } = {}) => {
   if (typeof value !== "function") {

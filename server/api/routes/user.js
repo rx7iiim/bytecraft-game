@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const pfps=[url1,url2,url3,url4,url5,url5]
 
 router.post("./signup",(req,res,next)=>{
   User.find({ email: req.body.email })
@@ -16,18 +17,18 @@ router.post("./signup",(req,res,next)=>{
         message: "Mail exists"
       });
     } else {  ( async function (username, email) {
-      const randomPicture = await Picture.aggregate([{ $sample: { size: 1 } }]);
+      const randomPicture = pfps.aggregate([{ $sample: { size: 1 } }]);
 
       if (randomPicture.length === 0) {
         throw new Error('No pictures found in the database');
       }
       const user = new User({
           _id: new mongoose.Types.ObjectId(),
-          score:0,
-          email:email,
-          username:username,
-          profileImage:randomPicture[0].url,
-          i:0,
+          email:req.body.email,
+          username:req.body.username,
+          password:req.body.password,
+          profileImage:randomPicture,
+
         });})
       user
       .save()

@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const myfruits = require("./api/routes/myfruits");
 const rankingRoutes = require("./api/routes/ranking");
 const userRoutes = require('./api/routes/user');
+const getfruitroutes=require("./api/routes/getfruit")
 
 
 
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/my fruits", myfruits);
 app.use("/ranking", rankingRoutes);
+app.use ("/get a new fuit",getfruitroutes)
 
 
 app.use((req, res, next) => {
