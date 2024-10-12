@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors=require("cors")
 
 const myfruits = require("./api/routes/myfruits.js");
 const rankingRoutes = require("./api/routes/ranking.js");
@@ -26,6 +27,7 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

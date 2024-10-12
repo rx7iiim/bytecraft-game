@@ -59,31 +59,35 @@ exec().then(re=>{
   console.log("err")
 });
 
-let add=0
+async function updateUserScore(userEmail, randomurl) {
+  try {
+    const scoretoadd = await fruits.findOne({ url: randomurl });
+    const usertoadd = await user.findOne({ email: userEmail });
 
-fruits.findOne({ url: randomurl })
-  .then(scoretoadd => {
     if (!scoretoadd) {
       console.log('No fruit found with the specified URL.');
       return;
     }
 
-    return user.findOne({ email: userEmail }).then(usertoadd => {
-      if (!usertoadd) {
-        console.log('No user found with the specified email.');
-        return;
-      }
+    if (!usertoadd) {
+      console.log('No user found with the specified email.');
+      return;
+    }
 
-      add = usertoadd.points + scoretoadd.score;
-      console.log('New score:', add);
-    });
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-  console.log(add)
+    const add = usertoadd.points + scoretoadd.score;
+    // Now you can use the 'add' value to update the user's score or for other operations
+    console.log('New score:', add);
+    
+    // Example of updating the user's points
+    await user.updateOne(
+      { email: userEmail },
+      { $set: { points: add ,lastRequestTime: now } }, { $push:{users:randomurl}}
+    );
+  } catch (error) {
+    console.error('Error updating user score:', error);
+  }
+}
 
-user.updateOne({ email: userEmail }, {$set:{points: add, lastRequestTime: now}}, { $push:{users:randomurl}})
 user.findOne({email:userEmail}).populate("pictures").exec().then(result => {
   res.status(200).json({
       message: 'user collection updated',
