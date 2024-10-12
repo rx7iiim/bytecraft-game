@@ -3,10 +3,10 @@ const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
-const myfruits = require("./api/routes/myfruits");
-const rankingRoutes = require("./api/routes/ranking");
-const userRoutes = require("./api/routes/user");
-const getfruitroutes = require("./api/routes/getfruit");
+const myfruits = require("./api/routes/myfruits.js");
+const rankingRoutes = require("./api/routes/ranking.js");
+const userRoutes = require("./api/routes/user.js");
+const getfruitroutes = require("./api/routes/getfruit.js");
 
 const uri = "mongodb+srv://bytecraft:bytecraft@first.avwfgdf.mongodb.net/?retryWrites=true&w=majority&appName=first";
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
@@ -40,10 +40,10 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
-app.use("./user", userRoutes);
-app.use("./myfruits", myfruits);
-app.use("./ranking", rankingRoutes);
-app.use("./getfruit", getfruitroutes);
+app.use("/user",userRoutes);
+app.use("/myfruits",myfruits);
+app.use("/ranking",rankingRoutes);
+app.use("/getfruit",getfruitroutes);
 
 app.use((req, res, next) => {
   const error = new Error("Resource not found");

@@ -2,7 +2,7 @@ const checkaurh = require("../midlleware/checkaurh");
 const express = require("express");
 const router = express.Router();
 
-const user=require("../models/user")
+const User=require("../models/user")
 const fruits=require("../models/fruits")
 
 
@@ -14,11 +14,11 @@ const fruitsurl = [
   "Did you know?"
 ];
 
-router.patch('/getfruit', checkaurh, async (req, res) => {
-  try {
+router.patch('/', checkaurh, (req, res,next) => {
     const userEmail = req.userData.email;
+    console.log(userEmail)
 
-    let user = await User.findOne({ email: userEmail });
+    const user =  User.findOne({ email:userEmail});
 
     if (!user) {
 
@@ -36,72 +36,61 @@ router.patch('/getfruit', checkaurh, async (req, res) => {
         return res.status(429).json({
           message: `Please wait ${remainingTime} more minutes before making another request.`
         });
-      }else
-      { 
+        process.exit(1);
+       }}
     const 
-    randomurl =(function () {
-        return fruitsurl[Math.floor(Math.random() * randomStrings.length)];
-      })();
-      const ex = await User.findOne({
-        _id: userId,
-        pictures: { $in: [randomurl] }
-      });
+    randomurl =fruitsurl[Math.floor(Math.random() * fruitsurl.length)];
+    if (user.pictures){
+      const ex = user.pictures.some(picture => picture.url === randomurl);
   
       while(ex) {
         const 
-        randomurl =(function () {
-            return fruitsurl[Math.floor(Math.random() * randomStrings.length)];
-          })();
-          const ex = await User.findOne({
-            _id: userId,
-            pictures: { $in: [randomurl] }
-          });
-      }
-    user.updateOne({ _id: req.userData._id }, { $push:{users:randomurl}})
-    await user.save();
-    await user.
-  findOne({ email:req.userData.email }).
-  populate('pictures').
-  exec()
-    .then(result => {
-      res.status(200).json({
-          message: 'user collection updated',
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+        randomurl =fruitsurl[Math.floor(Math.random() * fruitsurl.length)];
+          const ex = user.pictures.some(picture => picture.url === randomurl);
+      }}
+      console.log("iam here")
 
 fruits.updateOne({ url:randomurl }, { $push:{pictures:req.userData._id}})
-await fruits.save();
-await fruits.
+ fruits.
 findOne({ url:randomurl }).
 populate('users').
-exec()
-.then(result => {
+exec().then(re=>{
+  console.log("true")
+}).catch(err=>{
+  console.log("err")
+});
+
+const scoretoadd=fruits.findOne({url:randomurl})
+const usertoadd=user.findOne({email:userEmail})
+const add=usertoadd.points+scoretoadd.score
+console.log(add)
+user.updateOne({ email: userEmail }, {$set:{points: add, lastRequestTime: now}}, { $push:{users:randomurl}})
+user.findOne({email:userEmail}).populate("pictures").exec().then(result => {
   res.status(200).json({
       message: 'user collection updated',
   });
-})
-.catch(err => {
+}).catch(err => {
   console.log(err);
   res.status(500).json({
     error: err
   });
 })
-const scoretoadd=pictures.findOne({url:randomurl})
-const usertoadd=user.findOne({email:userEmail})
-const add=usertoadd.points+scoretoadd.score
-user.updateOne({ _id: req.userData._id }, { $set:{points:add}})
-await user.save();
-      }
+
+
     }
-    }
-  }catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    });
+router.post("/",(req,res,next)=>{
+  const fruit=new fruits({
+    url:req.body.url,
+    score:req.body.score,
+  })
+  fruit.save().then(res=>{
+    res.status(200).json({
+      message:"my code is working idk why",
+      res:res
+    })
+  }).catch(err=>{
+    res.status(409).json({err:err})
+  })
+})
 module.exports=router;

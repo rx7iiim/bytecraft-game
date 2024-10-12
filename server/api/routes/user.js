@@ -17,7 +17,7 @@ router.post("/signup",(req,res,next)=>{
   User.findOne({ email: req.body.email })
   .exec()
   .then(user => {
-    if (user.length >= 1) {
+    if (user) {
       return res.status(409).json({
         message: "Mail exists"
       });
@@ -39,8 +39,8 @@ router.post("/signup",(req,res,next)=>{
       .save()
       .then(result => {const token = jwt.sign(
         {
-          email: user[0].email,
-          userId: user[0]._id
+          email: user.email,
+          userId: user._id
         },
         process.env.JWT_KEY,
         {
@@ -67,12 +67,12 @@ router.post("/login", (req, res, next) => {
   User.findOne({ email: req.body.email })
     .exec()
     .then(user => {
-      if (user.length < 1) {return res.status(401).json({
+      if (! user) {return res.status(401).json({
           message: "Auth failed"})
        }else{ const token = jwt.sign(
         {
-          email: user[0].email,
-          userId: user[0]._id
+          email: user.email,
+          userId: user._id
         },
         process.env.JWT_KEY,
         {
