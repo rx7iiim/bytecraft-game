@@ -6,25 +6,23 @@ const fruits = require("../models/fruits");
 const checkaurh = require("../midlleware/checkaurh");
 
 router.get("/",checkaurh, (req, res, next) => {
-  const userId = req.userData.userId;
-    fruits.find({ users: { $elemMatch: { $eq: userId } } })
-      .select()
+  let response = null;
+  const userId= req.userData.userId;
+  fruits.find({ users: { $in: [userId] } })
+      .select("score url name")
       .exec()
       .then(docs => {
-        if (docs.length <= 0) {
-            res.status(404).json({
-                message: "you don't have any fruit yet"
-            });
-}else{
-        const response = {
+        response ={
           count: docs.length,
-          url: docs.map(doc => {
+          fruits: docs.map(doc => {
             return {
               url: doc.url,
-              
+              points:doc.score,
+              name:doc.name,
             };
           })
-        }}; res.status(200).json(response);
+        }
+        res.status(200).json(response);
      
       })
       .catch(err => {

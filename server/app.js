@@ -12,6 +12,7 @@ const getfruitroutes = require("./api/routes/getfruit.js");
 const uri = "mongodb+srv://bytecraft:bytecraft@first.avwfgdf.mongodb.net/?retryWrites=true&w=majority&appName=first";
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
+app.use(cors());
 async function run() {
   try {
     await mongoose.connect(uri, clientOptions);
@@ -28,7 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 const corsOptions = {
-   origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -37,7 +37,7 @@ const corsOptions = {
 
 
 
-app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

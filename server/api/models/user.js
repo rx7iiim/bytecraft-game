@@ -15,4 +15,4 @@ const userSchema = mongoose.Schema({
     points:{type:Number,default:0}
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('user', userSchema);

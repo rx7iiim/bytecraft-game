@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const fruitsSchema = mongoose.Schema({
     url: { type:String , required: true },
     score:Number,
-    users: [{ type:mongoose.Schema.Types.ObjectId, ref: 'user' }]
+    users: [{ type:mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    name:{type:String,required:true,unique:true}
 
 });
 

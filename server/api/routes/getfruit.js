@@ -12,11 +12,13 @@ const fruitsurl = [
   "https://drive.google.com/file/d/1w0TpayNMmk6LzMkqP9OeKSsuLM25opSo/view?usp=drive_link"
 ];
 
-router.patch('/', checkaurh, (req, res,next) => {
+router.post('/', checkaurh, async (req, res,next) => {
     const userEmail = req.userData.email;
+    const userId= req.userData.userId;
+    console.log(userId)
     console.log(userEmail)
 
-    const user =  User.findOne({ email:userEmail});
+    const  user =await  User.findOne({ email:userEmail});
 
     if (!user) {
 
@@ -48,21 +50,38 @@ router.patch('/', checkaurh, (req, res,next) => {
           const ex = user.pictures.some(picture => picture.url === randomurl);
       }}
       console.log("iam here")
+      try {
+        // Update the document and push the userEmail into the users array
+        await fruits.updateOne(
+          { url: randomurl }, 
+          { $push: { users: userId } }
+        );
+        console.log("User email successfully pushed.");
+      } catch (error) {
+        console.log("Error during update:", error);
+      }
+      
+      try {
+        // Find the document and populate the users field
+        const result = await fruits
+          .findOne({ url: randomurl })
+          .populate('users')
+          .exec(); // Using exec with await
+      
+        if (result) {
+          console.log("Document found and populated:", result);
+        } else {
+          console.log("No document found.");
+        }
+      } catch (error) {
+        console.log("Error during find and populate:", error);
+      }
+      
+}
 
-fruits.updateOne({ url:randomurl }, { $push:{pictures:req.userData.email}})
- fruits.
-findOne({ url:randomurl }).
-populate('users').
-exec().then(re=>{
-  console.log("true")
-}).catch(err=>{
-  console.log("err")
-});
-
-async function updateUserScore(userEmail, randomurl) {
   try {
     const scoretoadd = await fruits.findOne({ url: randomurl });
-    const usertoadd = await user.findOne({ email: userEmail });
+    const usertoadd = await User.findOne({ email: userEmail });
 
     if (!scoretoadd) {
       console.log('No fruit found with the specified URL.');
@@ -79,16 +98,16 @@ async function updateUserScore(userEmail, randomurl) {
     console.log('New score:', add);
     
     // Example of updating the user's points
-    await user.updateOne(
+    await User.updateOne(
       { email: userEmail },
-      { $set: { points: add ,lastRequestTime: now } }, { $push:{users:randomurl}}
+      { $set: { points: add ,lastRequestTime: now } }, { $push:{pictures:randomurl}}
     );
   } catch (error) {
     console.error('Error updating user score:', error);
   }
-}
 
-user.findOne({email:userEmail}).populate("pictures").exec().then(result => {
+
+await User.findOne({email:userEmail}).populate("pictures").exec().then(result => {
   res.status(200).json({
       message: 'user collection updated',
   });
@@ -100,7 +119,6 @@ user.findOne({email:userEmail}).populate("pictures").exec().then(result => {
 })
 
 
-    }
     });
 router.post("/",(req,res,next)=>{
   const fruit=new fruits({
