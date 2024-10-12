@@ -1,4 +1,6 @@
 const checkaurh = require("../midlleware/checkaurh");
+const express = require("express");
+const router = express.Router();
 
 const user=require("../models/user")
 const fruits=require("../models/fruits")

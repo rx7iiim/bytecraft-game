@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const fruitsSchema = mongoose.Schema({
-    url: { type: string , required: true },
+    url: { type:String , required: true },
     score:Number,
-    users: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+    users: [{ type:mongoose.Schema.Types.ObjectId, ref: 'user' }]
 
 });
 

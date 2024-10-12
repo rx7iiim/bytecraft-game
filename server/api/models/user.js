@@ -9,8 +9,8 @@ const userSchema = mongoose.Schema({
     },
     password: { type: String, required: true }
     ,userName:{type:String,required:true},score:{type:Number,default:0},
-    profileImage: { type:string },
-    pictures: [{ type: Schema.Types.ObjectId, ref: 'fruits' }],
+    profileImage: { type:String },
+    pictures: [{ type: mongoose.Schema.Types.ObjectId, ref: 'fruits' }],
     lastRequestTime: { type: Date, default: null },
     points:Number
 });
