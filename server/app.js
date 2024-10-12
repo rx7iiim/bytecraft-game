@@ -12,7 +12,7 @@ const getfruitroutes = require("./api/routes/getfruit.js");
 const uri = "mongodb+srv://bytecraft:bytecraft@first.avwfgdf.mongodb.net/?retryWrites=true&w=majority&appName=first";
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-app.use(cors());
+
 async function run() {
   try {
     await mongoose.connect(uri, clientOptions);
@@ -33,6 +33,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
+app.use(cors(corsOptions));
 
 
 
