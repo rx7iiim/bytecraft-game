@@ -7,11 +7,9 @@ const fruits=require("../models/fruits")
 
 
 const fruitsurl = [
-  "Hello World",
-  "Random String 1",
-  "Something Cool",
-  "Interesting Fact",
-  "Did you know?"
+  "https://drive.google.com/file/d/1FW-At87YHB0UKQJ3_z-nwEeO82JXDzsR/view?usp=drive_link",
+  "https://drive.google.com/file/d/18dRnLL9AVJVRAVhF9FB_sY8v8Gc2FCJi/view?usp=drive_link",
+  "https://drive.google.com/file/d/1w0TpayNMmk6LzMkqP9OeKSsuLM25opSo/view?usp=drive_link"
 ];
 
 router.patch('/', checkaurh, (req, res,next) => {
@@ -40,6 +38,7 @@ router.patch('/', checkaurh, (req, res,next) => {
        }}
     const 
     randomurl =fruitsurl[Math.floor(Math.random() * fruitsurl.length)];
+    console.log(randomurl)
     if (user.pictures){
       const ex = user.pictures.some(picture => picture.url === randomurl);
   
@@ -50,7 +49,7 @@ router.patch('/', checkaurh, (req, res,next) => {
       }}
       console.log("iam here")
 
-fruits.updateOne({ url:randomurl }, { $push:{pictures:req.userData._id}})
+fruits.updateOne({ url:randomurl }, { $push:{pictures:req.userData.email}})
  fruits.
 findOne({ url:randomurl }).
 populate('users').
@@ -60,10 +59,30 @@ exec().then(re=>{
   console.log("err")
 });
 
-const scoretoadd=fruits.findOne({url:randomurl})
-const usertoadd=user.findOne({email:userEmail})
-const add=usertoadd.points+scoretoadd.score
-console.log(add)
+let add=0
+
+fruits.findOne({ url: randomurl })
+  .then(scoretoadd => {
+    if (!scoretoadd) {
+      console.log('No fruit found with the specified URL.');
+      return;
+    }
+
+    return user.findOne({ email: userEmail }).then(usertoadd => {
+      if (!usertoadd) {
+        console.log('No user found with the specified email.');
+        return;
+      }
+
+      add = usertoadd.points + scoretoadd.score;
+      console.log('New score:', add);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  console.log(add)
+
 user.updateOne({ email: userEmail }, {$set:{points: add, lastRequestTime: now}}, { $push:{users:randomurl}})
 user.findOne({email:userEmail}).populate("pictures").exec().then(result => {
   res.status(200).json({

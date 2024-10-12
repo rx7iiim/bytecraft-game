@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     profileImage: { type:String },
     pictures: [{ type: mongoose.Schema.Types.ObjectId, ref: 'fruits' }],
     lastRequestTime: { type: Date, default: null },
-    points:Number
+    points:{type:Number,default:0}
 });
 
 module.exports = mongoose.model('User', userSchema);

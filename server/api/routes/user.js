@@ -22,7 +22,7 @@ router.post("/signup",(req,res,next)=>{
         message: "Mail exists"
       });
     } else {
-      const randomPicture = pfps.aggregate([{ $sample: { size: 1 } }]);
+      const randomPicture = pfps[Math.floor(Math.random() * pfps.length)];
 
       if (randomPicture.length === 0) {
         throw new Error('No pictures found in the database');
@@ -30,7 +30,7 @@ router.post("/signup",(req,res,next)=>{
       const user = new User({
           _id: new mongoose.Types.ObjectId(),
           email:req.body.email,
-          username:req.body.username,
+          userName:req.body.username,
           password:req.body.password,
           profileImage:randomPicture,
 
