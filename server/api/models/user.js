@@ -10,7 +10,6 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true }
     ,userName:{type:String,required:true},score:{type:Number,default:0},
     profileImage: { type:String },
-    pictures: [{ type: mongoose.Schema.Types.ObjectId, ref: 'fruits' }],
     lastRequestTime: { type: Date, default: null },
     points:{type:Number,default:0}
 });

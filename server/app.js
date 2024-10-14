@@ -9,8 +9,9 @@ const rankingRoutes = require("./api/routes/ranking.js");
 const userRoutes = require("./api/routes/user.js");
 const getfruitroutes = require("./api/routes/getfruit.js");
 const getprofileroutes =require("./api/routes/myProfile.js")
+require('dotenv').config();
 
-const uri = "mongodb+srv://bytecraft:bytecraft@first.avwfgdf.mongodb.net/?retryWrites=true&w=majority&appName=first";
+const uri=process.env.url;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 
