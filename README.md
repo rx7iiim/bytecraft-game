@@ -2,7 +2,7 @@
 rest api for a one-piece-game for bytecraft open day 2023-2024 
 
 
-## verview:
+## overview:
 The app is a game where players can open cards every 5 hours. These cards reveal devil fruits from the One Piece story, and each fruit has a certain score. Players compete to accumulate the highest score, and the player with the highest total score is the winner.
 
 ## Key Features:
